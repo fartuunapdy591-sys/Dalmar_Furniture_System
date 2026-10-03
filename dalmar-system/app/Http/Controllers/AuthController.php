@@ -20,6 +20,11 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $login = trim((string) $request->input('email'));
+        if ($login !== '' && ! str_contains($login, '@')) {
+            $request->merge(['email' => $login . '@dalmar.com']);
+        }
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
