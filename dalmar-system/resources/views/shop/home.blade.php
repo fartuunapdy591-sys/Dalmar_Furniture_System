@@ -5,20 +5,34 @@
 @section('hero')
     <style>
         .hero-section {
-            background: linear-gradient(120deg, var(--navy-dark) 0%, var(--navy) 55%, #24345c 100%);
+            background: var(--navy-dark);
             color: #fff;
-            padding: 80px 0;
+            padding: 90px 0;
             position: relative;
             overflow: hidden;
+            isolation: isolate;
         }
+        /* photo layer (blurred so the small source image stays smooth) */
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: -20px;
+            z-index: -2;
+            background: url('{{ asset('images/login-livingroom.jpg') }}') center / cover no-repeat;
+            filter: blur(6px) saturate(1.1);
+            transform: scale(1.05);
+        }
+        /* navy + gold overlay on top of the photo */
         .hero-section::after {
             content: "";
             position: absolute;
-            right: -80px; top: -80px;
-            width: 320px; height: 320px;
-            border-radius: 50%;
-            background: rgba(224, 162, 34, .12);
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 85% 15%, rgba(224, 162, 34, .28) 0%, transparent 45%),
+                linear-gradient(110deg, rgba(10, 17, 38, .94) 0%, rgba(20, 31, 66, .86) 55%, rgba(36, 52, 92, .72) 100%);
         }
+        .hero-section h1 { text-shadow: 0 4px 24px rgba(0,0,0,.35); }
         .hero-section h1 { font-weight: 700; font-size: 44px; line-height: 1.2; }
         .hero-section p.lead { color: #c7cfe2; font-size: 18px; max-width: 520px; }
         .hero-badge { display: inline-block; background: rgba(224,162,34,.15); color: var(--gold); font-weight: 600; font-size: 12px; letter-spacing: 1px; padding: 6px 16px; border-radius: 30px; margin-bottom: 18px; }
