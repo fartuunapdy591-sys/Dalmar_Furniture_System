@@ -16,11 +16,10 @@
         .hero-section::before {
             content: "";
             position: absolute;
-            inset: -20px;
+            inset: 0;
             z-index: -2;
             background: url('{{ asset('images/login-livingroom.jpg') }}') center / cover no-repeat;
-            filter: blur(6px) saturate(1.1);
-            transform: scale(1.05);
+            filter: saturate(1.1);
         }
         /* navy + gold overlay on top of the photo */
         .hero-section::after {
@@ -30,7 +29,7 @@
             z-index: -1;
             background:
                 radial-gradient(circle at 85% 15%, rgba(224, 162, 34, .28) 0%, transparent 45%),
-                linear-gradient(110deg, rgba(10, 17, 38, .94) 0%, rgba(20, 31, 66, .86) 55%, rgba(36, 52, 92, .72) 100%);
+                linear-gradient(110deg, rgba(10, 17, 38, .90) 0%, rgba(20, 31, 66, .72) 55%, rgba(36, 52, 92, .45) 100%);
         }
         .hero-section h1 { text-shadow: 0 4px 24px rgba(0,0,0,.35); }
         .hero-section h1 { font-weight: 700; font-size: 44px; line-height: 1.2; }
