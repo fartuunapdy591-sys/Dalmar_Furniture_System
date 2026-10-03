@@ -37,8 +37,11 @@
             <a href="{{ route('customers.index') }}" class="{{ request()->routeIs('customers.*') ? 'active' : '' }}">
                 <i class="bi bi-people-fill"></i> Customers
             </a>
-            <a href="{{ route('messages.index') }}" class="{{ request()->routeIs('messages.*') ? 'active' : '' }}">
-                <i class="bi bi-envelope-fill"></i> Messages
+            <a href="{{ route('messages.index') }}" class="{{ request()->routeIs('messages.*') ? 'active' : '' }} d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-envelope-fill"></i> Messages</span>
+                @if(($unreadMessagesCount ?? 0) > 0)
+                    <span class="badge rounded-pill bg-danger">{{ $unreadMessagesCount }}</span>
+                @endif
             </a>
             @endif
             @if(auth()->user()?->canAccessSales())

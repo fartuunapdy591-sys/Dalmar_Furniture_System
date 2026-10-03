@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ContactMessage;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Pagination\Paginator;
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
             $pendingOrders = (clone $pendingOrdersQuery)->with('customer')->latest()->take(5)->get();
             $pendingOrdersCount = $pendingOrdersQuery->count();
 
+            $view->with('unreadMessagesCount', ContactMessage::where('is_read', false)->count());
             $view->with('notifLowStock', $lowStockProducts);
             $view->with('notifPendingOrders', $pendingOrders);
             $view->with('notifPendingOrdersCount', $pendingOrdersCount);

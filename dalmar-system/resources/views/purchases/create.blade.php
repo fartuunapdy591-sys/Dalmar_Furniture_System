@@ -10,12 +10,15 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label small fw-semibold">Supplier</label>
-                    <select name="supplier_id" class="form-select" required>
-                        <option value="">-- Select Supplier --</option>
-                        @foreach($suppliers as $supplier)
-                            <option value="{{ $supplier->id }}" @selected(old('supplier_id') == $supplier->id)>{{ $supplier->name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="input-group">
+                        <select name="supplier_id" id="supplierSelect" class="form-select" required>
+                            <option value="">-- Select Supplier --</option>
+                            @foreach($suppliers as $supplier)
+                                <option value="{{ $supplier->id }}" @selected(old('supplier_id') == $supplier->id)>{{ $supplier->name }}</option>
+                            @endforeach
+                        </select>
+                        <button type="button" class="btn btn-navy" data-bs-toggle="modal" data-bs-target="#newSupplierModal">+ New</button>
+                    </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label small fw-semibold">Purchase Date</label>
@@ -101,10 +104,74 @@
             <a href="{{ route('purchases.index') }}" class="btn btn-light">Cancel</a>
         </div>
     </form>
+
+    <div class="modal fade" id="newSupplierModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="newSupplierForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Supplier</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger d-none" id="newSupplierError"></div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Company (optional)</label>
+                        <input type="text" name="company_name" class="form-control">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-semibold">Phone</label>
+                            <input type="text" name="phone" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-semibold">Email</label>
+                            <input type="email" name="email" class="form-control">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Address</label>
+                        <input type="text" name="address" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-navy">Save Supplier</button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
 <script>
+    document.getElementById('newSupplierForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const errorBox = document.getElementById('newSupplierError');
+        errorBox.classList.add('d-none');
+        const res = await fetch("{{ route('suppliers.store') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
+            },
+            body: new FormData(this),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            errorBox.textContent = data.errors ? Object.values(data.errors).flat().join(' ') : (data.message || 'Could not save supplier.');
+            errorBox.classList.remove('d-none');
+            return;
+        }
+        const select = document.getElementById('supplierSelect');
+        select.add(new Option(data.name, data.id, true, true));
+        this.reset();
+        bootstrap.Modal.getInstance(document.getElementById('newSupplierModal')).hide();
+    });
+
     const purchaseLines = document.getElementById('purchaseLines');
     const purchaseDiscount = document.getElementById('purchaseDiscount');
     const purchaseTax = document.getElementById('purchaseTax');
