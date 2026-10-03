@@ -1,0 +1,206 @@
+{
+    "results": [
+        {
+            "id": "T01",
+            "scenario": "Submit valid login credentials",
+            "expected": "User is authenticated and redirected to the dashboard",
+            "status": "Pass",
+            "actual": "HTTP 302 redirect to http:\/\/localhost\/dashboard"
+        },
+        {
+            "id": "T02",
+            "scenario": "Submit invalid login credentials",
+            "expected": "Login is rejected with a validation error",
+            "status": "Pass",
+            "actual": "HTTP 302 redirect to http:\/\/localhost"
+        },
+        {
+            "id": "T03",
+            "scenario": "Open the dashboard without signing in",
+            "expected": "Visitor is redirected to the login page",
+            "status": "Pass",
+            "actual": "HTTP 302 redirect to http:\/\/localhost\/login"
+        },
+        {
+            "id": "T04",
+            "scenario": "Create a product with valid data",
+            "expected": "Product is stored and appears in the product list",
+            "status": "Pass",
+            "actual": "HTTP 302; products 8 to 9"
+        },
+        {
+            "id": "T05",
+            "scenario": "Submit an invalid product form",
+            "expected": "Validation errors are returned and no record is saved",
+            "status": "Pass",
+            "actual": "HTTP 422; products unchanged at 9"
+        },
+        {
+            "id": "T06",
+            "scenario": "Complete a cash POS sale with available stock",
+            "expected": "Order, items, receipt, payment and stock-out movement are created and stock is reduced",
+            "status": "Pass",
+            "actual": "Stock 12 to 10; receipt REC-2026-001 status paid; movement type sale recorded"
+        },
+        {
+            "id": "T07",
+            "scenario": "Attempt to sell more than the available stock",
+            "expected": "Checkout is rejected and stock and orders are unchanged",
+            "status": "Pass",
+            "actual": "HTTP 422; stock stays 6; orders unchanged at 6"
+        },
+        {
+            "id": "T08",
+            "scenario": "Apply a 10 percent discount as an administrator",
+            "expected": "Discount is calculated and the activity is logged",
+            "status": "Pass",
+            "actual": "Subtotal 850.00, discount 85.00, total 765.00; log entries 1"
+        },
+        {
+            "id": "T09",
+            "scenario": "Apply a discount as a salesperson",
+            "expected": "Request is rejected with an authorization error",
+            "status": "Pass",
+            "actual": "HTTP 403; no order created"
+        },
+        {
+            "id": "T10",
+            "scenario": "Create an authorized credit sale with a part payment",
+            "expected": "Receipt is partly paid with a due date and an outstanding balance",
+            "status": "Pass",
+            "actual": "Receipt REC-2026-003 amount 1070.00, paid 500.00, balance 570, status partial"
+        },
+        {
+            "id": "T11",
+            "scenario": "Create a credit sale without a registered customer",
+            "expected": "Request is rejected because a registered customer is required",
+            "status": "Pass",
+            "actual": "HTTP 302; orders unchanged at 8"
+        },
+        {
+            "id": "T12",
+            "scenario": "Create a credit sale as a salesperson",
+            "expected": "Request is rejected with an authorization error",
+            "status": "Pass",
+            "actual": "HTTP 403; no order created"
+        },
+        {
+            "id": "T13",
+            "scenario": "Record a customer debt payment",
+            "expected": "Payment is allocated to the open receipt and the balance is reduced",
+            "status": "Pass",
+            "actual": "Balance 570.00 to 370.00"
+        },
+        {
+            "id": "T14",
+            "scenario": "Pay more than the outstanding debt as a non-administrator",
+            "expected": "Payment is rejected and the balance is unchanged",
+            "status": "Pass",
+            "actual": "Balance stays 370.00 (HTTP 302)"
+        },
+        {
+            "id": "T15",
+            "scenario": "Record a purchase from a supplier",
+            "expected": "Purchase is stored, product stock increases and the product cost is updated",
+            "status": "Pass",
+            "actual": "Stock 19 to 29; cost 0.00 to 27.59; purchases 1"
+        },
+        {
+            "id": "T16",
+            "scenario": "Cancel a completed order",
+            "expected": "Order status changes and stock is restored through a return movement",
+            "status": "Fail",
+            "actual": "HTTP 500; the database rejected the receipt status cancelled; order remained completed and stock stayed 10"
+        },
+        {
+            "id": "T17",
+            "scenario": "Open reports with a date range",
+            "expected": "Report page loads with totals for the selected period",
+            "status": "Pass",
+            "actual": "HTTP 200; page length 22581 characters"
+        },
+        {
+            "id": "T18",
+            "scenario": "Export a report",
+            "expected": "CSV file is generated",
+            "status": "Pass",
+            "actual": "HTTP 200; content type text\/csv; charset=utf-8"
+        },
+        {
+            "id": "T19",
+            "scenario": "Open user management as a non-administrator and as an administrator",
+            "expected": "Non-administrator is denied and administrator is allowed",
+            "status": "Pass",
+            "actual": "Salesperson HTTP 403; administrator HTTP 200"
+        },
+        {
+            "id": "T20",
+            "scenario": "Record an operating expense",
+            "expected": "Expense is stored with an expense number",
+            "status": "Pass",
+            "actual": "HTTP 302; expense number EXP-2026-001"
+        },
+        {
+            "id": "T21",
+            "scenario": "Check how passwords are stored",
+            "expected": "Passwords are stored as one-way hashes",
+            "status": "Pass",
+            "actual": "Stored value starts with $2y$12$ and has length 60"
+        },
+        {
+            "id": "T22",
+            "scenario": "Submit a form without a CSRF token",
+            "expected": "Request is rejected as expired or forged",
+            "status": "Pass",
+            "actual": "HTTP 419"
+        },
+        {
+            "id": "T23",
+            "scenario": "Cancel an order that has no receipt",
+            "expected": "Order status changes and stock is restored through a return movement",
+            "status": "Pass",
+            "actual": "Order status cancelled; stock 10 to 11; return movement recorded"
+        }
+    ],
+    "perf": [
+        {
+            "name": "Dashboard",
+            "avg": 79.8,
+            "max": 540.8
+        },
+        {
+            "name": "Product list",
+            "avg": 81.2,
+            "max": 254.9
+        },
+        {
+            "name": "Order list",
+            "avg": 21.7,
+            "max": 28.4
+        },
+        {
+            "name": "POS screen",
+            "avg": 23.4,
+            "max": 36.9
+        },
+        {
+            "name": "Reports page",
+            "avg": 115.6,
+            "max": 312.8
+        },
+        {
+            "name": "Customer debts",
+            "avg": 51.6,
+            "max": 62.9
+        },
+        {
+            "name": "POS checkout (create sale)",
+            "avg": 35.8,
+            "max": 60.3
+        }
+    ],
+    "neg": 0,
+    "mismatch": 0,
+    "orders": 13,
+    "receipts": 8
+}
