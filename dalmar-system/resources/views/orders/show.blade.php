@@ -85,6 +85,26 @@
                     <span>Total Amount</span>
                     <span>${{ number_format($order->total_amount, 2) }}</span>
                 </div>
+
+                @if(auth()->user()->canManageDiscounts() && ! in_array($order->status, ['completed', 'cancelled']))
+                    <hr>
+                    <form action="{{ route('orders.discount', $order) }}" method="POST" class="row g-2 align-items-end">
+                        @csrf @method('PATCH')
+                        <div class="col-5">
+                            <label class="form-label small fw-semibold">Discount</label>
+                            <select name="discount_type" class="form-select form-select-sm">
+                                <option value="percentage" @selected($order->discount_type === 'percentage')>Percent (%)</option>
+                                <option value="fixed" @selected($order->discount_type === 'fixed')>Fixed ($)</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" step="0.01" min="0" name="discount_value" class="form-control form-control-sm" value="{{ $order->discount_value ?? 0 }}">
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-navy btn-sm w-100">Apply</button>
+                        </div>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

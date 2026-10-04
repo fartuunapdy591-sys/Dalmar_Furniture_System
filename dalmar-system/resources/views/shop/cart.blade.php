@@ -62,6 +62,14 @@
                     <label class="form-label small fw-semibold">Delivery Address</label>
                     <textarea name="address" class="form-control" rows="2" required>{{ old('address') }}</textarea>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Payment Method</label>
+                    <select name="payment_method" class="form-select" required>
+                        @foreach(['cash' => 'Cash', 'e_dahab' => 'e-Dahab', 'sahal' => 'Sahal', 'mycash' => 'MyCash', 'card' => 'Card / Bank'] as $value => $label)
+                            <option value="{{ $value }}" @selected(old('payment_method', 'cash') === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-navy w-100">Submit Order</button>
             </form>
         </div>

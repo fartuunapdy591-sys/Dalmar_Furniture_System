@@ -79,6 +79,7 @@ class ShopController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:30'],
             'address' => ['required', 'string', 'max:255'],
+            'payment_method' => ['required', 'in:cash,sahal,e_dahab,mycash,card'],
         ]);
 
         [$lines, $total] = $this->cartLines();
@@ -99,7 +100,7 @@ class ShopController extends Controller
                 'customer_id' => $customer->id,
                 'user_id' => null,
                 'order_date' => now()->toDateString(),
-                'payment_method' => 'cash',
+                'payment_method' => $data['payment_method'],
                 'is_credit_sale' => false,
                 'shipping_address' => $data['address'],
                 'status' => 'pending',

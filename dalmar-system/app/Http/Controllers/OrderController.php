@@ -199,6 +199,45 @@ class OrderController extends Controller
         return back()->with('success', 'Order status has been updated successfully.');
     }
 
+    public function applyDiscount(Request $request, Order $order)
+    {
+        $user = Auth::user();
+
+        if (! $user->canManageDiscounts()) {
+            abort(403, 'You are not authorized to apply discounts.');
+        }
+
+        if (in_array($order->status, ['completed', 'cancelled'])) {
+            return back()->with('error', 'Discount can only be changed on pending or processing orders.');
+        }
+
+        $data = $request->validate([
+            'discount_type' => ['required', 'in:percentage,fixed'],
+            'discount_value' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        $subtotal = (float) ($order->subtotal ?? $order->total_amount);
+        $amount = $data['discount_type'] === 'percentage'
+            ? $subtotal * min($data['discount_value'], 100) / 100
+            : $data['discount_value'];
+        $amount = round(min($amount, $subtotal), 2);
+
+        $order->update([
+            'subtotal' => $subtotal,
+            'discount_type' => $amount > 0 ? $data['discount_type'] : null,
+            'discount_value' => $amount > 0 ? $data['discount_value'] : 0,
+            'discount_amount' => $amount,
+            'discount_by' => $amount > 0 ? $user->id : null,
+            'total_amount' => round($subtotal - $amount, 2),
+        ]);
+
+        if ($amount > 0) {
+            ActivityLog::record('discount_applied', $order, "{$user->name} applied a {$order->discount_label} discount (\${$amount}) to order {$order->order_number}.");
+        }
+
+        return back()->with('success', 'Discount has been updated.');
+    }
+
     public function destroy(Order $order)
     {
         DB::transaction(function () use ($order) {

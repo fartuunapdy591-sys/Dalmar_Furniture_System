@@ -106,6 +106,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin,sales_manager,salesperson')->group(function () {
         Route::resource('orders', OrderController::class)->except(['create', 'edit', 'update']);
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+        Route::patch('/orders/{order}/discount', [OrderController::class, 'applyDiscount'])->name('orders.discount');
 
         Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
         Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('pos.checkout');
