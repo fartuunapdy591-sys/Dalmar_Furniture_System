@@ -63,7 +63,7 @@
     <section class="hero-section">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-7">
+                <div class="col-lg-8">
                     <span class="hero-badge">TRUSTED FURNITURE STORE</span>
                     <h1>Furnish Your Home With Comfort &amp; Style</h1>
                     <p class="lead my-3">
@@ -73,11 +73,6 @@
                     <div class="d-flex flex-wrap gap-3 mt-4">
                         <a href="{{ route('shop.index') }}" class="btn btn-gold btn-lg px-4"><i class="bi bi-cart3 me-1"></i> Shop Now</a>
                         <a href="{{ route('shop.about') }}" class="btn btn-outline-light btn-lg px-4">Learn More</a>
-                    </div>
-                </div>
-                <div class="col-lg-5 d-none d-lg-block">
-                    <div class="hero-img-wrap">
-                        <img src="{{ asset('images/login-furniture.jpg') }}" alt="Modern furniture living room">
                     </div>
                 </div>
             </div>
