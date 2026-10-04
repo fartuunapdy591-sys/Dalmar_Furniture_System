@@ -86,6 +86,11 @@
                     <span>${{ number_format($order->total_amount, 2) }}</span>
                 </div>
 
+                @if(auth()->user()->canManageDiscounts() && in_array($order->status, ['completed', 'cancelled']))
+                    <hr>
+                    <div class="small text-muted">To add or change a discount, set the status to Pending or Processing first.</div>
+                @endif
+
                 @if(auth()->user()->canManageDiscounts() && ! in_array($order->status, ['completed', 'cancelled']))
                     <hr>
                     <form action="{{ route('orders.discount', $order) }}" method="POST" class="row g-2 align-items-end">
