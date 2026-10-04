@@ -32,7 +32,23 @@
                     <tr><td class="text-muted">Email</td><td>{{ $order->customer->email ?? '-' }}</td></tr>
                     <tr><td class="text-muted">Phone</td><td>{{ $order->customer->phone ?? '-' }}</td></tr>
                     <tr><td class="text-muted">Order Date</td><td>{{ $order->order_date->format('M d, Y') }}</td></tr>
-                    <tr><td class="text-muted">Payment Method</td><td>{{ ucfirst($order->payment_method) }}</td></tr>
+                    <tr>
+                        <td class="text-muted">Payment Method</td>
+                        <td>
+                            @if($order->status === 'cancelled')
+                                {{ ucfirst(str_replace('_', ' ', $order->payment_method)) }}
+                            @else
+                                <form action="{{ route('orders.payment-method', $order) }}" method="POST">
+                                    @csrf @method('PATCH')
+                                    <select name="payment_method" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        @foreach(['cash' => 'Cash', 'e_dahab' => 'e-Dahab', 'sahal' => 'Sahal', 'mycash' => 'MyCash', 'card' => 'Card / Bank'] as $value => $label)
+                                            <option value="{{ $value }}" @selected($order->payment_method === $value)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
                     <tr>
                         <td class="text-muted">Status</td>
                         <td>

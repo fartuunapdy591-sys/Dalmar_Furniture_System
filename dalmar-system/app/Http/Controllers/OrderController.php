@@ -199,6 +199,20 @@ class OrderController extends Controller
         return back()->with('success', 'Order status has been updated successfully.');
     }
 
+    public function updatePaymentMethod(Request $request, Order $order)
+    {
+        $data = $request->validate([
+            'payment_method' => ['required', 'in:cash,sahal,e_dahab,mycash,card'],
+        ]);
+
+        DB::transaction(function () use ($order, $data) {
+            $order->update(['payment_method' => $data['payment_method']]);
+            Payment::where('order_id', $order->id)->update(['method' => $data['payment_method']]);
+        });
+
+        return back()->with('success', 'Payment method has been updated.');
+    }
+
     public function applyDiscount(Request $request, Order $order)
     {
         $user = Auth::user();
