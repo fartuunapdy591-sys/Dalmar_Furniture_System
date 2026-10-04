@@ -79,7 +79,7 @@ class ShopController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:30'],
             'address' => ['required', 'string', 'max:255'],
-            'payment_method' => ['required', 'in:cash,sahal,e_dahab,mycash,card'],
+            'payment_method' => ['required', 'in:cash,mobile_money,e_dahab'],
         ]);
 
         [$lines, $total] = $this->cartLines();

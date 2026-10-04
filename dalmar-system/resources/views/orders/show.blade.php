@@ -41,7 +41,13 @@
                                 <form action="{{ route('orders.payment-method', $order) }}" method="POST">
                                     @csrf @method('PATCH')
                                     <select name="payment_method" class="form-select form-select-sm" onchange="this.form.submit()">
-                                        @foreach(['cash' => 'Cash', 'e_dahab' => 'e-Dahab', 'sahal' => 'Sahal', 'mycash' => 'MyCash', 'card' => 'Card / Bank'] as $value => $label)
+                                        @php
+                                            $methods = ['cash' => 'Cash', 'mobile_money' => 'Mobile Money', 'e_dahab' => 'e-Dahab'];
+                                            if (! isset($methods[$order->payment_method])) {
+                                                $methods[$order->payment_method] = ucfirst(str_replace('_', ' ', $order->payment_method));
+                                            }
+                                        @endphp
+                                        @foreach($methods as $value => $label)
                                             <option value="{{ $value }}" @selected($order->payment_method === $value)>{{ $label }}</option>
                                         @endforeach
                                     </select>

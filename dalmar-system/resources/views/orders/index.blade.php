@@ -180,11 +180,9 @@
                         <div class="mb-3">
                             <label class="form-label small fw-semibold">Payment Method</label>
                             <select name="payment_method" class="form-select" required>
-                                <option value="sahal">Sahal</option>
-                                <option value="e_dahab">e-Dahab</option>
-                                <option value="mycash">MyCash</option>
                                 <option value="cash">Cash</option>
-                                <option value="card">Card</option>
+                                <option value="mobile_money">Mobile Money</option>
+                                <option value="e_dahab">e-Dahab</option>
                             </select>
                             <div class="form-text">The order is recorded as pending. The receipt and payment are created automatically once the order status is changed to Completed.</div>
                         </div>

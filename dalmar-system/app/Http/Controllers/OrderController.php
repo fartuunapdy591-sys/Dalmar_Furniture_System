@@ -42,7 +42,7 @@ class OrderController extends Controller
         $data = $request->validate([
             'customer_id' => ['required', 'exists:customers,id'],
             'order_date' => ['required', 'date'],
-            'payment_method' => ['required', 'in:cash,sahal,e_dahab,mycash,card'],
+            'payment_method' => ['required', 'in:cash,mobile_money,e_dahab'],
             'shipping_address' => ['nullable', 'string', 'max:255'],
             'products' => ['required', 'array', 'min:1'],
             'products.*.id' => ['required', 'exists:products,id'],
@@ -202,7 +202,7 @@ class OrderController extends Controller
     public function updatePaymentMethod(Request $request, Order $order)
     {
         $data = $request->validate([
-            'payment_method' => ['required', 'in:cash,sahal,e_dahab,mycash,card'],
+            'payment_method' => ['required', 'in:cash,mobile_money,e_dahab'],
         ]);
 
         DB::transaction(function () use ($order, $data) {

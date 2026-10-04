@@ -65,7 +65,7 @@
                 <div class="mb-3">
                     <label class="form-label small fw-semibold">Payment Method</label>
                     <select name="payment_method" class="form-select" required>
-                        @foreach(['cash' => 'Cash', 'e_dahab' => 'e-Dahab', 'sahal' => 'Sahal', 'mycash' => 'MyCash', 'card' => 'Card / Bank'] as $value => $label)
+                        @foreach(['cash' => 'Cash', 'mobile_money' => 'Mobile Money', 'e_dahab' => 'e-Dahab'] as $value => $label)
                             <option value="{{ $value }}" @selected(old('payment_method', 'cash') === $value)>{{ $label }}</option>
                         @endforeach
                     </select>
