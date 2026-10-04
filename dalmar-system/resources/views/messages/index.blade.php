@@ -80,7 +80,22 @@
                         <div class="small text-muted mb-1">Message</div>
                         <p class="mb-0">{{ $message->message }}</p>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer flex-wrap">
+                        @php
+                            $waNumber = ltrim(preg_replace('/\D+/', '', (string) $message->phone), '0');
+                            $replySubject = rawurlencode('Re: '.($message->subject ?: 'Your message to Dalmar Furniture'));
+                        @endphp
+                        @if($waNumber)
+                            <a href="https://wa.me/{{ $waNumber }}?text={{ rawurlencode('Salaan '.$message->name.', ') }}" target="_blank" rel="noopener" class="btn btn-success">
+                                <i class="bi bi-whatsapp me-1"></i> Reply WhatsApp
+                            </a>
+                            <a href="tel:{{ $message->phone }}" class="btn btn-light"><i class="bi bi-telephone-fill me-1"></i> Call</a>
+                        @endif
+                        @if($message->email)
+                            <a href="mailto:{{ $message->email }}?subject={{ $replySubject }}" class="btn btn-navy">
+                                <i class="bi bi-envelope-fill me-1"></i> Reply Email
+                            </a>
+                        @endif
                         @if(! $message->is_read)
                             <form action="{{ route('messages.read', $message) }}" method="POST">
                                 @csrf @method('PATCH')
