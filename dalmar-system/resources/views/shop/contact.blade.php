@@ -9,9 +9,9 @@
         <div class="col-md-4">
             <div style="background:#fff; border-radius: 14px; padding: 24px; box-shadow: 0 2px 10px rgba(16,25,46,.06); height: 100%;">
                 <h6 class="fw-bold mb-3" style="color: var(--navy);">Get In Touch</h6>
-                <p class="mb-2"><i class="bi bi-geo-alt-fill me-2" style="color: var(--navy);"></i> Mogadishu, Somalia</p>
-                <p class="mb-2"><i class="bi bi-telephone-fill me-2" style="color: var(--navy);"></i> +252 61 XXX XXXX</p>
-                <p class="mb-2"><i class="bi bi-envelope-fill me-2" style="color: var(--navy);"></i> info@dalmarfurniture.com</p>
+                <p class="mb-2"><i class="bi bi-geo-alt-fill me-2" style="color: var(--navy);"></i> {{ $setting->address ?: 'Garowe, Somalia' }}</p>
+                <p class="mb-2"><i class="bi bi-telephone-fill me-2" style="color: var(--navy);"></i> {{ $setting->phone ?: '+252 XX XXX XXXX' }}</p>
+                <p class="mb-2"><i class="bi bi-envelope-fill me-2" style="color: var(--navy);"></i> {{ $setting->email ?: 'info@dalmarfurniture.com' }}</p>
                 <p class="mb-0"><i class="bi bi-clock-fill me-2" style="color: var(--navy);"></i> Sat - Thu: 8:00 AM - 6:00 PM</p>
             </div>
         </div>

@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -139,12 +140,12 @@ class ShopController extends Controller
 
     public function about()
     {
-        return view('shop.about');
+        return view('shop.about', ['setting' => Setting::current()]);
     }
 
     public function contact()
     {
-        return view('shop.contact');
+        return view('shop.contact', ['setting' => Setting::current()]);
     }
 
     public function contactSubmit(Request $request)
